@@ -1,0 +1,200 @@
+{
+  "tenant_id": "marau",
+  "display_name": "Península de Maraú",
+  "origin_city": "Rio de Janeiro",
+  "destination_city": "Ilhéus",
+  "generated_at": "2026-08-13T14:32",
+  "target_nights": 10,
+  "has_real_data": false,
+  "routes": [
+    {
+      "id": "direct_ilheus",
+      "label": "Voo direto até Ilhéus (IOS) + traslado curto até Maraú",
+      "notes": null,
+      "flight": {
+        "optimistic": 2500.0,
+        "realistic": 3000.0,
+        "conservative": 3360.0
+      },
+      "transfer": {
+        "optimistic": 360,
+        "realistic": 600,
+        "conservative": 880
+      },
+      "fixed": {
+        "optimistic": 1700,
+        "realistic": 2800,
+        "conservative": 4200
+      },
+      "grand": {
+        "optimistic": 4560.0,
+        "realistic": 6400.0,
+        "conservative": 8440.0
+      }
+    },
+    {
+      "id": "fly_salvador_overland",
+      "label": "Voo até Salvador (SSA) + ferry/ônibus/lancha até Maraú",
+      "notes": "Salvador costuma ter bem mais voos e promoções que Ilhéus (mais concorrência entre companhias). Rota: ferry Salvador-Bom Despacho (~R$9) + ônibus Bom Despacho-Camamu (~R$65-70) + lancha Camamu-Barra Grande (~R$60/pessoa) = valor \"realista\" acima; ou transfer privado porta-a-porta (mais caro, mais confortável).\n",
+      "flight": {
+        "optimistic": 2500.0,
+        "realistic": 3000.0,
+        "conservative": 3360.0
+      },
+      "transfer": {
+        "optimistic": 600,
+        "realistic": 880,
+        "conservative": 1520
+      },
+      "fixed": {
+        "optimistic": 1700,
+        "realistic": 2800,
+        "conservative": 4200
+      },
+      "grand": {
+        "optimistic": 4800.0,
+        "realistic": 6680.0,
+        "conservative": 9080.0
+      }
+    }
+  ],
+  "winner_route_id": "direct_ilheus",
+  "best_days": [
+    {
+      "depart_date": "2027-02-11",
+      "nights": 8,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 14,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-11",
+      "nights": 9,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 14,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-11",
+      "nights": 10,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 14,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-11",
+      "nights": 11,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 14,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-11",
+      "nights": 12,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 14,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-17",
+      "nights": 8,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 4,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-17",
+      "nights": 9,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 4,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-17",
+      "nights": 10,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 4,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-17",
+      "nights": 11,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 4,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-17",
+      "nights": 12,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 4,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-02",
+      "nights": 8,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 2,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-02",
+      "nights": 9,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 2,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-02",
+      "nights": 10,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 2,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-02",
+      "nights": 11,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 2,
+      "has_real_check": false
+    },
+    {
+      "depart_date": "2027-02-02",
+      "nights": 12,
+      "min_price": 2500.0,
+      "avg_price": 2500.0,
+      "samples": 2,
+      "has_real_check": false
+    }
+  ],
+  "weekday_avg": {
+    "Seg": 3000.0,
+    "Ter": 2944.44,
+    "Qua": 2909.09,
+    "Qui": 2789.47,
+    "Sex": 3360.0,
+    "Sáb": 3024.0,
+    "Dom": 3126.67
+  },
+  "price_history": [
+    {
+      "date": "2026-08-13",
+      "price": 2500.0
+    }
+  ],
+  "guide_html": "<p><b>Um pouco de história:</b> Maraú nasceu em 1717, catequizada por frades\ncapuchinhos italianos; no século XIX ingleses instalaram ali uma usina de\ndestilação de querosene. Hoje a península tem pouco mais de 20 mil\nhabitantes, vivendo sobretudo da pesca artesanal e da produção de azeite de\ndendê, cacau, guaraná e pimenta-do-reino — dá pra sentir esse ritmo de\nvilarejo de pescadores assim que sai de Barra Grande. Se a viagem cair perto\nde fevereiro/março, vale checar a data do <b>Festival da Tainha</b>, festa\ngastronômica e cultural local com comidas à base do peixe, desfiles e dança\nfolclórica.</p>\n\n<p><b>Onde ficar como base:</b> Barra Grande é a vila principal — concentra\nmercado, restaurantes, bares e a maior parte das pousadas, e fica pertinho da\nPonta do Mutá (ponto clássico de pôr do sol). Taipu de Fora, ~15min de carro/\nquadriciclo, é a praia mais fotografada da península: 7km de faixa de areia,\ncoqueiral e piscinas naturais que na maré baixa viram point de snorkeling.</p>\n\n<p><b>Sugestão de roteiro para 10 noites</b> (dá pra ajustar conforme as\ndatas de maré, que mandam mais que o calendário nessa região):</p>\n<ul>\n  <li><b>Dias 1-2 — Barra Grande:</b> chegada, aclimatação, pôr do sol na\n  Ponta do Mutá, jantar na vila.</li>\n  <li><b>Dias 3-5 — Taipu de Fora:</b> praia + piscinas naturais na maré\n  baixa (checar tábua de maré antes de fixar essa janela), aula de kitesurf\n  se o vento ajudar, um dia pra Trilha das Bromélias até a Praia do\n  Cassange.</li>\n  <li><b>Dias 6-7 — Praias mais isoladas:</b> Três Coqueiros e Bombaça de\n  quadriciclo (as trilhas de areia margeando lagoas são parte do passeio).</li>\n  <li><b>Dias 8-9 — Segunda base mais tranquila:</b> Algodões ou Saquaíra,\n  pra fugir do movimento de Barra Grande/Taipu nos últimos dias.</li>\n  <li><b>Dia 10 — Volta:</b> dia de folga/compensação pra imprevisto de\n  lancha/maré antes do transfer de volta.</li>\n</ul>\n\n<p><b>Dica prática:</b> quadriciclo alugado é o meio de transporte mais usado\ndentro da península (as vias são de areia). Se a rota escolhida for\nSalvador→Camamu→lancha, os horários de lancha dependem de maré — vale\nconfirmar o horário mais próximo da data real antes de fechar o transfer.</p>\n"
+}

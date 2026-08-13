@@ -1,0 +1,72 @@
+# Config do "tenant"/roteiro. Copie este arquivo para criar um roteiro novo.
+tenant_id: marau
+display_name: "Península de Maraú"
+currency: BRL
+travelers: 2
+
+# status: "active" = roteiro definido -> monitoramento constante (inclusive a
+# fonte paga/limitada, SerpApi). status: "draft" = só simulação, usa apenas
+# fontes grátis (Amadeus) e não gasta cota da SerpApi.
+status: active
+
+# Cidade de origem (pra exibição e pro link do Google Voos) + aeroportos aceitos
+# nela (o coletor testa todos e fica com o mais barato por data)
+origin_city: "Rio de Janeiro"
+origin_airports:
+  - GIG   # Galeão
+  - SDU   # Santos Dumont
+
+# Janela de busca
+search_window:
+  start: "2027-01-01"
+  end: "2027-02-28"
+
+# Períodos a NUNCA sugerir (a semana cheia de carnaval)
+blackout_dates:
+  - start: "2027-02-06"
+    end: "2027-02-10"
+    reason: "Semana de Carnaval 2027 (sáb a Cinzas)"
+
+# Duração da viagem: valor alvo + faixa de comparação
+trip_length:
+  target_nights: 10
+  compare_range: [8, 9, 10, 11, 12]
+
+# Rotas alternativas até o destino final (Barra Grande / Península de Maraú).
+# O sistema busca passagem pra CADA uma e soma o traslado terrestre, pra
+# comparar "avião direto" vs "avião até outro hub + carro/van/lancha".
+# valores de traslado em BRL por pessoa, cenário [otimista, realista, conservador]
+route_options:
+  - id: direct_ilheus
+    label: "Voo direto até Ilhéus (IOS) + traslado curto até Maraú"
+    destination_airport: IOS   # Ilhéus - Jorge Amado, ~2h de van+lancha até Barra Grande
+    ground_transfer_per_person: [90, 150, 220]
+    ground_transfer_hours: 2.5
+
+  - id: fly_salvador_overland
+    label: "Voo até Salvador (SSA) + ferry/ônibus/lancha até Maraú"
+    destination_airport: SSA   # Salvador - Deputado Luís Eduardo Magalhães
+    ground_transfer_per_person: [150, 220, 380]
+    ground_transfer_hours: 6.5
+    notes: >
+      Salvador costuma ter bem mais voos e promoções que Ilhéus (mais
+      concorrência entre companhias). Rota: ferry Salvador-Bom Despacho
+      (~R$9) + ônibus Bom Despacho-Camamu (~R$65-70) + lancha
+      Camamu-Barra Grande (~R$60/pessoa) = valor "realista" acima; ou
+      transfer privado porta-a-porta (mais caro, mais confortável).
+
+# Custos fora do aéreo/traslado (estimativas iniciais - servem de prior até
+# termos dados reais). valores em BRL, por pessoa, cenário [otimista, realista, conservador]
+extra_costs:
+  food_per_person_per_day: [70, 110, 160]
+  local_transport_passeios_per_person_total: [150, 300, 500]
+
+# Regras de alerta
+alerts:
+  # dispara se o preço encontrado for X% (ou mais) abaixo da mediana histórica da janela
+  drop_pct_threshold: 15
+  # sempre dispara se for o menor preço já visto pra essa combinação origem/data/duração
+  always_alert_new_low: true
+  # quantas das melhores datas (já rankeadas por Amadeus/estimativa) conferir
+  # de verdade no Google Voos via SerpApi a cada execução (cota grátis = 100/mês)
+  serpapi_top_n_check: 3

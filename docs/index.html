@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Travel Radar</title>
+<style>
+  :root {
+    --accent: #0E7C7B;
+    --accent-ink: #075250;
+    --warn: #C9622A;
+    --alert: #D64550;
+    --ink: #16211F;
+    --ink-soft: #4B5B56;
+    --bg: #EFF3EE;
+    --surface: #FFFFFF;
+    --surface-soft: #F5F8F4;
+    --border: #DCE3DE;
+    --shadow: 0 1px 2px rgba(22,33,31,0.06), 0 1px 1px rgba(22,33,31,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --accent: #2BB3AA; --accent-ink: #9FE6DE; --warn: #E08A52; --alert: #F0707C;
+      --ink: #E7EFEA; --ink-soft: #A9BAB4; --bg: #0B1615; --surface: #12211F;
+      --surface-soft: #16302B; --border: #24413C; --shadow: 0 1px 2px rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --accent: #2BB3AA; --accent-ink: #9FE6DE; --warn: #E08A52; --alert: #F0707C;
+    --ink: #E7EFEA; --ink-soft: #A9BAB4; --bg: #0B1615; --surface: #12211F;
+    --surface-soft: #16302B; --border: #24413C; --shadow: 0 1px 2px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body {
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 28px 20px 72px;
+    line-height: 1.5;
+  }
+  h1, h2 { font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif; text-wrap: balance; margin: 0; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-variant-numeric: tabular-nums; }
+  a { color: var(--accent-ink); }
+
+  header.page { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+  header.page .eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: 12px; color: var(--accent-ink); font-weight: 600; }
+  header.page h1 { font-size: 28px; }
+  header.page .meta { color: var(--ink-soft); font-size: 13px; }
+
+  .banner { background: var(--surface-soft); border: 1px solid var(--border); border-left: 3px solid var(--warn);
+    border-radius: 8px; padding: 12px 16px; font-size: 13.5px; color: var(--ink-soft); margin-bottom: 22px; display: none; }
+  .banner.show { display: block; }
+  .banner b { color: var(--ink); }
+
+  .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+  .segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+  .segmented button { border: none; background: transparent; color: var(--ink-soft); font-size: 13px; font-weight: 600;
+    padding: 7px 14px; cursor: pointer; }
+  .segmented button.active { background: var(--accent); color: white; }
+  .segmented button:not(.active):hover { background: var(--surface-soft); }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-bottom: 30px; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .stat .label { font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); margin-bottom: 6px; }
+  .stat .value { font-size: 21px; font-weight: 600; color: var(--accent-ink); }
+  .stat .sub { font-size: 12px; color: var(--ink-soft); margin-top: 3px; }
+
+  section { margin-bottom: 32px; }
+  section > .section-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+  section > .section-head h2 { font-size: 18px; }
+  section > .section-note { font-size: 12.5px; color: var(--ink-soft); margin: -8px 0 14px; }
+
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .filters select, .filters input {
+    font-size: 12.5px; padding: 5px 9px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--ink); font-family: inherit;
+  }
+
+  .table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; background: var(--surface); }
+  th, td { padding: 9px 12px; text-align: left; white-space: nowrap; }
+  thead th { background: var(--surface-soft); color: var(--ink-soft); font-weight: 600; font-size: 11.5px;
+    text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+  thead th:hover { color: var(--ink); }
+  thead th.sorted::after { content: " " attr(data-dir); font-size: 10px; }
+  tbody tr + tr td { border-top: 1px solid var(--border); }
+  tbody tr.winner { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); }
+  .pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 18%, var(--surface)); color: var(--accent-ink); margin-left: 6px; }
+  a.gflink { text-decoration: none; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+  a.gflink:hover { text-decoration: underline; }
+  a.gflink::after { content: " ↗"; }
+
+  .weekday-chart { display: flex; align-items: flex-end; gap: 10px; height: 120px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px 10px; }
+  .weekday-chart .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+  .weekday-chart .bar { width: 100%; max-width: 34px; border-radius: 4px 4px 0 0; background: var(--accent); }
+  .weekday-chart .bar.cheapest { background: var(--warn); }
+  .weekday-chart .day-label { font-size: 11px; color: var(--ink-soft); }
+
+  #price-chart-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  #price-chart { width: 100%; height: 180px; display: block; }
+  .empty-note { color: var(--ink-soft); font-size: 13px; padding: 18px; text-align: center; }
+
+  .guide { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; font-size: 14.5px; }
+  .guide p { margin: 0 0 14px; }
+  .guide ul { margin: 0 0 14px; padding-left: 20px; }
+  .guide li { margin-bottom: 6px; }
+  .guide b { color: var(--accent-ink); }
+
+  footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 12px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<header class="page">
+  <div class="eyebrow" id="hdr-eyebrow">Travel Radar</div>
+  <h1 id="hdr-title">Carregando…</h1>
+  <div class="meta" id="hdr-meta"></div>
+</header>
+
+<div class="banner" id="estimate-banner">
+  ⚠️ <b>Ainda em modo estimativa.</b> Nenhuma cotação real (Duffel/SerpApi) foi coletada até agora —
+  os valores abaixo vêm da estimativa de pesquisa inicial. Assim que o token da Duffel for configurado,
+  o job horário passa a alimentar isso com preço de mercado real.
+</div>
+
+<div class="toolbar">
+  <div class="segmented" id="scenario-toggle">
+    <button data-scenario="optimistic">Otimista</button>
+    <button data-scenario="realistic" class="active">Realista</button>
+    <button data-scenario="conservative">Conservador</button>
+  </div>
+</div>
+
+<div class="stat-grid" id="stat-grid"></div>
+
+<section>
+  <div class="section-head"><h2>Comparação de rotas</h2></div>
+  <p class="section-note">Aéreo + traslado terrestre, casal, ida e volta. Comida/passeios somam à parte.</p>
+  <div class="table-scroll"><table>
+    <thead><tr><th>Rota</th><th>Aéreo</th><th>Traslado</th><th>Total</th></tr></thead>
+    <tbody id="routes-body"></tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="section-head"><h2>Custos fixos (independem da rota)</h2></div>
+  <div class="table-scroll"><table>
+    <thead><tr><th></th><th>Otimista</th><th>Realista</th><th>Conservador</th></tr></thead>
+    <tbody id="fixed-body"></tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>Melhores dias observados</h2>
+    <div class="filters">
+      <select id="filter-nights"><option value="">Todas as durações</option></select>
+      <input id="filter-search" type="text" placeholder="buscar data (aaaa-mm)">
+    </div>
+  </div>
+  <p class="section-note">Clique no cabeçalho pra ordenar. Link abre a mesma busca pronta no Google Voos.</p>
+  <div class="table-scroll"><table>
+    <thead><tr>
+      <th data-key="depart_date">Ida</th><th data-key="return_date">Volta</th>
+      <th data-key="nights">Noites</th><th data-key="min_price">Menor preço</th>
+      <th data-key="avg_price">Preço médio</th><th data-key="samples">Amostras</th><th></th>
+    </tr></thead>
+    <tbody id="days-body"></tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="section-head"><h2>Preço por dia da semana de ida</h2></div>
+  <div class="weekday-chart" id="weekday-chart"></div>
+</section>
+
+<section>
+  <div class="section-head"><h2>Tendência de preço coletado</h2></div>
+  <div id="price-chart-wrap"><canvas id="price-chart"></canvas></div>
+</section>
+
+<section>
+  <div class="section-head"><h2>Contexto cultural e sugestão de roteiro</h2></div>
+  <div class="guide" id="guide"></div>
+</section>
+
+<footer id="footer"></footer>
+
+<script>
+const LABEL_PT = {optimistic: "Otimista", realistic: "Realista", conservative: "Conservador"};
+let DATA = null;
+let scenario = "realistic";
+let sortKey = "min_price";
+let sortDir = 1;
+
+function fmtBRL(n) {
+  return "R$ " + Number(n).toLocaleString("pt-BR", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+}
+function addDaysISO(iso, n) {
+  const d = new Date(iso + "T00:00:00");
+  d.setDate(d.getDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+function gflightsUrl(origin, dest, depart, ret) {
+  const q = `Flights from ${origin} to ${dest} on ${depart} through ${ret}`;
+  return "https://www.google.com/travel/flights?q=" + encodeURIComponent(q);
+}
+
+async function load() {
+  const res = await fetch("./data.json", {cache: "no-store"});
+  DATA = await res.json();
+  render();
+}
+
+function render() {
+  document.getElementById("hdr-eyebrow").textContent = `Travel Radar · roteiro: ${DATA.tenant_id}`;
+  document.getElementById("hdr-title").textContent = DATA.display_name;
+  document.getElementById("hdr-meta").textContent =
+    `Origem: ${DATA.origin_city} · Destino: ${DATA.destination_city} · Duração alvo: ${DATA.target_nights} noites · Atualizado em ${new Date(DATA.generated_at).toLocaleString("pt-BR")}`;
+  document.getElementById("estimate-banner").classList.toggle("show", !DATA.has_real_data);
+  document.getElementById("guide").innerHTML = DATA.guide_html || "<p>Sem guia ainda.</p>";
+
+  renderStats();
+  renderRoutes();
+  renderFixed();
+  renderNightsFilter();
+  renderDays();
+  renderWeekday();
+  renderPriceChart();
+  renderFooter();
+}
+
+function winnerRoute() {
+  return DATA.routes.find(r => r.id === DATA.winner_route_id) || DATA.routes[0];
+}
+
+function renderStats() {
+  const w = winnerRoute();
+  const grid = document.getElementById("stat-grid");
+  if (!w) { grid.innerHTML = ""; return; }
+  const cheapestDay = [...DATA.best_days].sort((a, b) => a.min_price - b.min_price)[0];
+  const wkEntries = Object.entries(DATA.weekday_avg).filter(([, v]) => v !== null);
+  const cheapestWk = wkEntries.length ? wkEntries.reduce((a, b) => a[1] < b[1] ? a : b) : null;
+
+  grid.innerHTML = `
+    <div class="stat"><div class="label">Rota recomendada</div>
+      <div class="value">${w.label.split(" (")[0].split(" +")[0]}</div>
+      <div class="sub">${w.notes ? w.notes.slice(0, 70) + "…" : "menor total no cenário " + LABEL_PT[scenario].toLowerCase()}</div></div>
+    <div class="stat"><div class="label">Total estimado (casal, ${LABEL_PT[scenario].toLowerCase()})</div>
+      <div class="value mono">${fmtBRL(w.grand[scenario])}</div>
+      <div class="sub">aéreo + traslado + comida + passeios</div></div>
+    <div class="stat"><div class="label">Melhor dia observado</div>
+      <div class="value mono">${cheapestDay ? cheapestDay.depart_date : "—"}</div>
+      <div class="sub">${cheapestDay ? fmtBRL(cheapestDay.min_price) + " (casal, aéreo)" : "sem dados ainda"}</div></div>
+    <div class="stat"><div class="label">Melhor dia da semana p/ ida</div>
+      <div class="value">${cheapestWk ? cheapestWk[0] : "—"}</div>
+      <div class="sub">${cheapestWk ? fmtBRL(cheapestWk[1]) : ""}</div></div>
+  `;
+}
+
+function renderRoutes() {
+  const tbody = document.getElementById("routes-body");
+  tbody.innerHTML = DATA.routes.map(r => `
+    <tr class="${r.id === DATA.winner_route_id ? "winner" : ""}">
+      <td>${r.label}${r.id === DATA.winner_route_id ? '<span class="pill">melhor</span>' : ""}
+        ${r.notes ? `<div style="font-size:11.5px;color:var(--ink-soft);max-width:340px;margin-top:4px;">${r.notes}</div>` : ""}</td>
+      <td class="mono">${fmtBRL(r.flight[scenario])}</td>
+      <td class="mono">${fmtBRL(r.transfer[scenario])}</td>
+      <td class="mono"><b>${fmtBRL(r.grand[scenario])}</b></td>
+    </tr>`).join("");
+}
+
+function renderFixed() {
+  const w = winnerRoute();
+  document.getElementById("fixed-body").innerHTML = w ? `
+    <tr><td>Comida + passeios (casal, ${DATA.target_nights} noites)</td>
+      <td class="mono">${fmtBRL(w.fixed.optimistic)}</td>
+      <td class="mono">${fmtBRL(w.fixed.realistic)}</td>
+      <td class="mono">${fmtBRL(w.fixed.conservative)}</td></tr>` : "";
+}
+
+function renderNightsFilter() {
+  const sel = document.getElementById("filter-nights");
+  if (sel.dataset.built) return;
+  const nightsSet = [...new Set(DATA.best_days.map(d => d.nights))].sort((a, b) => a - b);
+  nightsSet.forEach(n => {
+    const opt = document.createElement("option");
+    opt.value = n; opt.textContent = n + " noites";
+    sel.appendChild(opt);
+  });
+  sel.dataset.built = "1";
+}
+
+function renderDays() {
+  const nightsFilter = document.getElementById("filter-nights").value;
+  const search = document.getElementById("filter-search").value.trim();
+  let rows = DATA.best_days.map(d => ({...d, return_date: addDaysISO(d.depart_date, d.nights)}));
+  if (nightsFilter) rows = rows.filter(d => String(d.nights) === nightsFilter);
+  if (search) rows = rows.filter(d => d.depart_date.includes(search));
+  rows.sort((a, b) => (a[sortKey] > b[sortKey] ? 1 : a[sortKey] < b[sortKey] ? -1 : 0) * sortDir);
+
+  document.querySelectorAll("th[data-key]").forEach(th => {
+    th.classList.toggle("sorted", th.dataset.key === sortKey);
+    th.dataset.dir = sortDir === 1 ? "▲" : "▼";
+  });
+
+  const tbody = document.getElementById("days-body");
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="7" class="empty-note">Nenhum dia bate com esse filtro.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(d => {
+    const link = gflightsUrl(DATA.origin_city, DATA.destination_city, d.depart_date, d.return_date);
+    return `<tr>
+      <td class="mono">${d.depart_date}</td><td class="mono">${d.return_date}</td>
+      <td class="mono">${d.nights}</td><td class="mono">${fmtBRL(d.min_price)}${d.has_real_check ? " ✅" : ""}</td>
+      <td class="mono">${fmtBRL(d.avg_price)}</td><td class="mono">${d.samples}</td>
+      <td><a class="gflink" href="${link}" target="_blank" rel="noopener">Google Voos</a></td>
+    </tr>`;
+  }).join("");
+}
+
+function renderWeekday() {
+  const el = document.getElementById("weekday-chart");
+  const entries = Object.entries(DATA.weekday_avg).filter(([, v]) => v !== null);
+  if (!entries.length) { el.innerHTML = '<div class="empty-note">Sem dados ainda.</div>'; return; }
+  const vals = entries.map(([, v]) => v);
+  const min = Math.min(...vals), max = Math.max(...vals);
+  el.innerHTML = entries.map(([day, val]) => {
+    const pct = 20 + ((val - min) / (max - min || 1)) * 80;
+    return `<div class="bar-col">
+      <div class="mono" style="font-size:10.5px;color:var(--ink-soft)">${Math.round(val)}</div>
+      <div class="bar${val === min ? " cheapest" : ""}" style="height:${pct}%"></div>
+      <div class="day-label">${day}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderPriceChart() {
+  const canvas = document.getElementById("price-chart");
+  const wrap = document.getElementById("price-chart-wrap");
+  const hist = DATA.price_history;
+  if (!hist.length) { wrap.innerHTML = '<div class="empty-note">Ainda sem histórico suficiente pra desenhar a tendência.</div>'; return; }
+
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth || wrap.clientWidth;
+  const h = 180;
+  canvas.width = w * dpr; canvas.height = h * dpr;
+  const ctx = canvas.getContext("2d");
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, w, h);
+
+  const pad = {l: 54, r: 14, t: 14, b: 22};
+  const prices = hist.map(p => p.price);
+  const min = Math.min(...prices), max = Math.max(...prices);
+  const range = max - min || 1;
+  const x = i => pad.l + (i / Math.max(hist.length - 1, 1)) * (w - pad.l - pad.r);
+  const y = v => pad.t + (1 - (v - min) / range) * (h - pad.t - pad.b);
+
+  const ink = getComputedStyle(document.documentElement).getPropertyValue("--ink-soft").trim();
+  const border = getComputedStyle(document.documentElement).getPropertyValue("--border").trim();
+  const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+
+  ctx.strokeStyle = border; ctx.lineWidth = 1; ctx.font = "10.5px -apple-system, sans-serif"; ctx.fillStyle = ink;
+  [min, (min + max) / 2, max].forEach(v => {
+    const yy = y(v);
+    ctx.beginPath(); ctx.moveTo(pad.l, yy); ctx.lineTo(w - pad.r, yy); ctx.stroke();
+    ctx.fillText(fmtBRL(v), 2, yy + 3);
+  });
+
+  ctx.beginPath();
+  hist.forEach((p, i) => i === 0 ? ctx.moveTo(x(i), y(p.price)) : ctx.lineTo(x(i), y(p.price)));
+  ctx.lineTo(x(hist.length - 1), y(min)); ctx.lineTo(x(0), y(min)); ctx.closePath();
+  ctx.fillStyle = accent + "22"; ctx.fill();
+
+  ctx.beginPath();
+  hist.forEach((p, i) => i === 0 ? ctx.moveTo(x(i), y(p.price)) : ctx.lineTo(x(i), y(p.price)));
+  ctx.strokeStyle = accent; ctx.lineWidth = 2; ctx.stroke();
+
+  const last = hist[hist.length - 1];
+  ctx.fillStyle = accent;
+  ctx.beginPath(); ctx.arc(x(hist.length - 1), y(last.price), 3.5, 0, 7); ctx.fill();
+}
+
+function renderFooter() {
+  document.getElementById("footer").innerHTML =
+    `Publicado automaticamente pelo Travel Radar a cada execução do job horário (só quando o roteiro está
+    <span class="mono">status: active</span>). Link do Google Voos é montado a partir da própria busca deles,
+    não é chamada de API.`;
+}
+
+document.getElementById("scenario-toggle").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-scenario]");
+  if (!btn) return;
+  scenario = btn.dataset.scenario;
+  document.querySelectorAll("#scenario-toggle button").forEach(b => b.classList.toggle("active", b === btn));
+  renderStats(); renderRoutes(); renderFixed();
+});
+document.getElementById("filter-nights").addEventListener("change", renderDays);
+document.getElementById("filter-search").addEventListener("input", renderDays);
+document.querySelectorAll("th[data-key]").forEach(th => {
+  th.addEventListener("click", () => {
+    const key = th.dataset.key;
+    sortDir = (sortKey === key) ? -sortDir : 1;
+    sortKey = key;
+    renderDays();
+  });
+});
+window.addEventListener("resize", () => { if (DATA) renderPriceChart(); });
+
+load();
+</script>
+</body>
+</html>
