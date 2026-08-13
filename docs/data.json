@@ -3,7 +3,7 @@
   "display_name": "Península de Maraú",
   "origin_city": "Rio de Janeiro",
   "destination_city": "Ilhéus",
-  "generated_at": "2026-08-13T14:32",
+  "generated_at": "2026-08-13T18:59",
   "target_nights": 10,
   "has_real_data": false,
   "routes": [
@@ -61,87 +61,87 @@
   "winner_route_id": "direct_ilheus",
   "best_days": [
     {
-      "depart_date": "2027-02-11",
+      "depart_date": "2027-02-02",
       "nights": 8,
       "min_price": 2500.0,
       "avg_price": 2500.0,
-      "samples": 14,
+      "samples": 2,
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-11",
+      "depart_date": "2027-02-02",
       "nights": 9,
       "min_price": 2500.0,
       "avg_price": 2500.0,
-      "samples": 14,
+      "samples": 2,
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-11",
+      "depart_date": "2027-02-02",
       "nights": 10,
       "min_price": 2500.0,
       "avg_price": 2500.0,
-      "samples": 14,
+      "samples": 2,
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-11",
+      "depart_date": "2027-02-02",
       "nights": 11,
       "min_price": 2500.0,
       "avg_price": 2500.0,
-      "samples": 14,
+      "samples": 2,
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-11",
+      "depart_date": "2027-02-02",
       "nights": 12,
       "min_price": 2500.0,
       "avg_price": 2500.0,
-      "samples": 14,
+      "samples": 2,
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-17",
+      "depart_date": "2027-02-04",
       "nights": 8,
       "min_price": 2500.0,
       "avg_price": 2500.0,
-      "samples": 4,
+      "samples": 2,
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-17",
+      "depart_date": "2027-02-04",
       "nights": 9,
       "min_price": 2500.0,
       "avg_price": 2500.0,
-      "samples": 4,
+      "samples": 2,
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-17",
+      "depart_date": "2027-02-04",
       "nights": 10,
       "min_price": 2500.0,
       "avg_price": 2500.0,
-      "samples": 4,
+      "samples": 2,
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-17",
+      "depart_date": "2027-02-04",
       "nights": 11,
       "min_price": 2500.0,
       "avg_price": 2500.0,
-      "samples": 4,
+      "samples": 2,
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-17",
+      "depart_date": "2027-02-04",
       "nights": 12,
       "min_price": 2500.0,
       "avg_price": 2500.0,
-      "samples": 4,
+      "samples": 2,
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-02",
+      "depart_date": "2027-02-11",
       "nights": 8,
       "min_price": 2500.0,
       "avg_price": 2500.0,
@@ -149,7 +149,7 @@
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-02",
+      "depart_date": "2027-02-11",
       "nights": 9,
       "min_price": 2500.0,
       "avg_price": 2500.0,
@@ -157,7 +157,7 @@
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-02",
+      "depart_date": "2027-02-11",
       "nights": 10,
       "min_price": 2500.0,
       "avg_price": 2500.0,
@@ -165,7 +165,7 @@
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-02",
+      "depart_date": "2027-02-11",
       "nights": 11,
       "min_price": 2500.0,
       "avg_price": 2500.0,
@@ -173,7 +173,7 @@
       "has_real_check": false
     },
     {
-      "depart_date": "2027-02-02",
+      "depart_date": "2027-02-11",
       "nights": 12,
       "min_price": 2500.0,
       "avg_price": 2500.0,
@@ -183,12 +183,12 @@
   ],
   "weekday_avg": {
     "Seg": 3000.0,
-    "Ter": 2944.44,
-    "Qua": 2909.09,
-    "Qui": 2789.47,
+    "Ter": 2833.33,
+    "Qua": 3000.0,
+    "Qui": 2750.0,
     "Sex": 3360.0,
-    "Sáb": 3024.0,
-    "Dom": 3126.67
+    "Sáb": 3173.33,
+    "Dom": 3360.0
   },
   "price_history": [
     {
