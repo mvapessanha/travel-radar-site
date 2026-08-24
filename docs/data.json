@@ -3,7 +3,7 @@
   "display_name": "Península de Maraú",
   "origin_city": "Rio de Janeiro",
   "destination_city": "Ilhéus",
-  "generated_at": "2026-08-23T23:18",
+  "generated_at": "2026-08-24T01:06",
   "target_nights": 10,
   "has_real_data": false,
   "routes": [
@@ -192,7 +192,7 @@
   },
   "price_history": [
     {
-      "date": "2026-08-23",
+      "date": "2026-08-24",
       "price": 2500.0
     }
   ],
